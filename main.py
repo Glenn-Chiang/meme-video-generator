@@ -1,4 +1,5 @@
-from helpers import get_token, get_subreddits
+from helpers import get_token, get_subreddit_posts
+
 
 def main():
     print('Authenticating...')
@@ -8,16 +9,16 @@ def main():
     headers = {'Authorization': f'bearer {token}',
                'User-Agent': 'script:scraper:0.1 (by /u/DarthKnight024)'}
 
-    print('Getting subreddits...')
-    subreddits = get_subreddits(headers)
-    for subreddit_metadata in subreddits:
-        subreddit = subreddit_metadata['data']
-        display_name = subreddit['display_name']
-        recent_active_users = subreddit['accounts_active']
-        subscribers = subreddit['subscribers']
-        title = subreddit['title']
-        url = subreddit['url']
-        print(display_name, subscribers, title, url)
+    target_subreddits = ['ProgrammerHumor', 'programminghorror']
+
+    for subreddit in target_subreddits:
+        posts = get_subreddit_posts(subreddit_name=subreddit, headers=headers)
+        for post_with_kind in posts:
+            post = post_with_kind['data']
+            image_url = post['url']
+            permalink = f"https://www.reddit.com{post['permalink']}"
+            print('\n')
+
 
 if __name__ == '__main__':
     main()

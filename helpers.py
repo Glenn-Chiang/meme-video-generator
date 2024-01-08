@@ -39,6 +39,28 @@ def get_subreddits(headers):
     except Exception as error:
         print(f'Error getting subreddits: {error}')
         sys.exit()
-    listing = response.json()
-    subreddits = listing['data']['children']
+
+    subreddits = response.json()['data']['children']
     return subreddits
+
+
+def get_subreddit_metadata(subreddit):
+    name = subreddit['display_name']
+    recent_active_users = subreddit['accounts_active']
+    subscribers = subreddit['subscribers']
+    title = subreddit['title']
+    url = subreddit['url']
+    return (name, subscribers, title, url)
+
+
+def get_subreddit_posts(subreddit_name, headers):
+    response = None
+    try:
+        response = requests.get(
+            f'https://oauth.reddit.com/r/{subreddit_name}/top', params={'limit': 10}, headers=headers)
+    except Exception as error:
+        print(f'Error getting posts for r/{subreddit_name}: {error}')
+
+    posts =  response.json()['data']['children']
+    return posts
+
