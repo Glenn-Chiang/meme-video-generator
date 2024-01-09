@@ -16,9 +16,7 @@ def main():
         for post_with_kind in posts:
             post = post_with_kind['data']
             image_url = post['url']
-            permalink = f"https://www.reddit.com{post['permalink']}"
-            print('\n')
-
+            print(image_url)
 
 if __name__ == '__main__':
     main()
