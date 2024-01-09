@@ -11,7 +11,8 @@ def main():
                'User-Agent': 'script:scraper:0.1 (by /u/DarthKnight024)'}
 
     # target_subreddits = ['programminghorror','ProgrammerHumor']
-    target_subreddits = ['anime_irl', 'animemes']
+    video_title = 'video'
+    target_subreddits = ['animenocontext', 'animemes', 'anime_irl']
     image_urls = []
 
     for subreddit in target_subreddits:
@@ -27,7 +28,7 @@ def main():
             image_urls.append(image_url)
         print('')
 
-    create_video(image_urls=image_urls)
+    create_video(image_urls=image_urls, title=video_title)
 
 
 if __name__ == '__main__':

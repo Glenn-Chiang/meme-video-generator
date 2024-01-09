@@ -61,6 +61,5 @@ def get_subreddit_posts(subreddit_name, headers, count):
     except Exception as error:
         print(f'Error getting posts for r/{subreddit_name}: {error}')
 
-    posts =  response.json()['data']['children']
+    posts = response.json()['data']['children']
     return posts
-
