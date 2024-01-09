@@ -12,16 +12,20 @@ def main():
 
     # target_subreddits = ['programminghorror','ProgrammerHumor']
     target_subreddits = ['anime_irl', 'animemes']
-
     image_urls = []
 
     for subreddit in target_subreddits:
-        posts = get_subreddit_posts(subreddit_name=subreddit, headers=headers, count=10)
+        print(f'Getting posts for r/{subreddit}...')
+        posts = get_subreddit_posts(
+            subreddit_name=subreddit, headers=headers, count=10)
         for post_with_kind in posts:
             post = post_with_kind['data']
             image_url = post['url']
             print(image_url)
+            if post['media']: # Skip video posts; only use images
+                continue
             image_urls.append(image_url)
+        print('')
 
     create_video(image_urls=image_urls)
 
