@@ -4,6 +4,7 @@ def main():
     video_filepath = f'tmp/test.mp4'
     video = VideoFileClip(video_filepath)
     audio = AudioFileClip('assets/MILF_fnf.mp3') # TODO: find suitable audio file
+    audio = audio.cutout(80, audio.duration)
     final_video: VideoFileClip = video.set_audio(audio)
     final_video.write_videofile(f'tmp/video_final.mp4')
 

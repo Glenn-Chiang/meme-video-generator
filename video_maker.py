@@ -50,6 +50,7 @@ def create_video(image_urls, title):
     print('Adding music...')
     video = VideoFileClip(video_filepath)
     audio = AudioFileClip('assets/MILF_fnf.mp3') 
+    audio = audio.cutout(80, audio.duration)
     final_video: VideoFileClip = video.set_audio(audio)
     final_video.write_videofile(f'tmp/{title}_final.mp4')
 
@@ -60,4 +61,5 @@ if __name__ == '__main__':
     create_video()
 
 
-# TODO: Fit audio and video to 1min20s, i.e. 20 videos at 4 seconds per video
+# Song length: 124s. Take first 64 - 80 seconds?
+# 16 - 20 images, 4 seconds per image 

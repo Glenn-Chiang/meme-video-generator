@@ -10,15 +10,15 @@ def main():
     headers = {'Authorization': f'bearer {token}',
                'User-Agent': 'script:scraper:0.1 (by /u/DarthKnight024)'}
 
-    # target_subreddits = ['programminghorror','ProgrammerHumor']
+    target_subreddits = ['ProgrammerHumor']
     video_title = 'video'
-    target_subreddits = ['animenocontext', 'animemes', 'anime_irl']
+    # target_subreddits = ['animemes', 'anime_irl']
     image_urls = []
 
     for subreddit in target_subreddits:
         print(f'Getting posts for r/{subreddit}...')
         posts = get_subreddit_posts(
-            subreddit_name=subreddit, headers=headers, count=10)
+            subreddit_name=subreddit, headers=headers, count=20)
         for post_with_kind in posts:
             post = post_with_kind['data']
             image_url = post['url']
