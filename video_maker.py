@@ -26,7 +26,7 @@ def resize_and_pad_image(image: np.ndarray, window_size=Tuple[int, int]):
     return processed_image
 
 
-def create_video(images: List[np.ndarray], video_size: Tuple[int, int], output_path):
+def compile_images_to_video(images: List[np.ndarray], video_size: Tuple[int, int], output_path):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     fps = 0.25
 
@@ -36,30 +36,26 @@ def create_video(images: List[np.ndarray], video_size: Tuple[int, int], output_p
         writer.write(image=image)
 
 
-def main():
+def create_video(image_urls):
     video_size = (800, 800)
-    image_urls = ['https://i.redd.it/hmx0q06oh8bc1.jpeg',
-                  'https://i.redd.it/ghqvhf063abc1.jpeg',
-                  'https://i.redd.it/btpa4n4ie7bc1.jpeg',
-                  'https://i.redd.it/3w7j7zit57bc1.jpeg',
-                  'https://i.redd.it/emhtpd0nk1bc1.png',
-                  'https://i.redd.it/1i26k8vly6bc1.jpeg',
-                  'https://i.redd.it/h41jkoe4wabc1.jpeg',
-                  'https://i.redd.it/itgb2tlcg8bc1.png',
-                  'https://i.redd.it/fe226bi827bc1.jpeg',
-                  'https://i.redd.it/s7a4g1rsj9bc1.png',
-                  'https://i.redd.it/5xrgtxys3bbc1.png']
-
+    
     original_images = [decode_img_from_url(url) for url in image_urls]
-    processed_images = [resize_and_pad_image(
-        img, window_size=video_size) for img in original_images]
+    processed_images = []
 
-    # for idx, image in enumerate(processed_images):
-    #     # cv2.imwrite(f'output/image_{idx}.png', img=image)
+    for idx, img in enumerate(original_images):
+        try:
+            processed_image = resize_and_pad_image(img, window_size=video_size)
+            processed_images.append(processed_image)
+        except Exception as error:
+            print(f'Error processing img {idx}: {error}')
+            continue
 
-    create_video(processed_images, video_size, 'output/video.mp4')
+    for idx, image in enumerate(processed_images):
+        cv2.imwrite(f'output/image_{idx}.png', img=image)
+
+    compile_images_to_video(processed_images, video_size, 'output/test.mp4')
     print('Done')
 
 
 if __name__ == '__main__':
-    main()
+    create_video()
