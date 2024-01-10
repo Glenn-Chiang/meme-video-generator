@@ -1,4 +1,4 @@
-from reddit_api_methods import get_token, get_subreddit_posts
+from meme_fetcher import get_token, get_subreddit_posts
 from video_maker import create_video
 from moviepy.editor import AudioFileClip
 
@@ -11,8 +11,8 @@ def main():
     headers = {'Authorization': f'bearer {token}',
                'User-Agent': 'script:scraper:0.1 (by /u/DarthKnight024)'}
 
-    # target_subreddits = ['ProgrammerHumor']
-    target_subreddits = ['animemes', 'anime_irl']
+    target_subreddits = ['ProgrammerHumor', 'programminghorror']
+    # target_subreddits = ['animemes', 'anime_irl']
 
     video_filepath = 'tmp/video.mp4'
     audio_filepath = 'assets/music.mp3'
