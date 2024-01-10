@@ -12,9 +12,9 @@ def decode_img_from_url(image_url: str):
     return img
 
 
-def compose_images_to_video(images: List[np.ndarray], video_size: Tuple[int, int], output_path):
+def compose_images_to_video(images: List[np.ndarray], video_size: Tuple[int, int], seconds_per_video: int, output_path: str):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    fps = 0.25
+    fps = 1 / seconds_per_video
 
     writer = cv2.VideoWriter(output_path, fourcc, fps, video_size)
     
@@ -22,7 +22,7 @@ def compose_images_to_video(images: List[np.ndarray], video_size: Tuple[int, int
         writer.write(image=image)
 
 
-def create_video(image_urls, title):
+def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str):
     video_size = (800, 800)
 
     print('Decoding images from urls...')
@@ -39,20 +39,20 @@ def create_video(image_urls, title):
             print(f'Error processing img {idx}: {error}')
             continue
 
-    # for idx, image in enumerate(processed_images):
-    #     cv2.imwrite(f'output/image_{idx}.png', img=image)
+    num_images = len(processed_images)
+    seconds_per_video = 4
+    video_duration = num_images * seconds_per_video
 
     print('Writing video...')
-    video_filepath = f'tmp/{title}.mp4'
     compose_images_to_video(
-        processed_images, video_size, output_path=video_filepath)
+        processed_images, video_size, seconds_per_video, output_path=video_filepath)
     
+
     print('Adding music...')
     video = VideoFileClip(video_filepath)
-    audio = AudioFileClip('assets/MILF_fnf.mp3') 
-    audio = audio.cutout(80, audio.duration)
+    audio = AudioFileClip(audio_filepath) 
     final_video: VideoFileClip = video.set_audio(audio)
-    final_video.write_videofile(f'tmp/{title}_final.mp4')
+    final_video.write_videofile(video_filepath)
 
     print('Done')
 
