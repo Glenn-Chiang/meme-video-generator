@@ -46,9 +46,8 @@ def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str
     print('Adding music...')
     video = VideoFileClip(video_filepath)
     audio = AudioFileClip(audio_filepath)
-    audio = audio.cutout(video.duration, audio.duration)  # Cut excess audio
     final_video: VideoFileClip = video.set_audio(audio)
-    final_video.write_videofile(video_filepath)
+    final_video.write_videofile('tmp/video_final.mp4')
 
     print('Done')
 
@@ -57,5 +56,4 @@ if __name__ == '__main__':
     create_video()
 
 
-# Song length: 124s. Take first 64 - 80 seconds?
-# 16 - 20 images, 4 seconds per image
+# Video stops after a certain frame after audio is added. WHY??????
