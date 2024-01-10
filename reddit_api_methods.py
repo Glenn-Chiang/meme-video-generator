@@ -53,13 +53,14 @@ def get_subreddit_metadata(subreddit):
     return (name, subscribers, title, url)
 
 
-def get_subreddit_posts(subreddit_name, headers, count):
+def get_subreddit_posts(subreddit_name, headers, limit, after):
     response = None
     try:
         response = requests.get(
-            f'https://oauth.reddit.com/r/{subreddit_name}/top', params={'limit': count}, headers=headers)
+            f'https://oauth.reddit.com/r/{subreddit_name}/top', params={'limit': limit, 'after': after}, headers=headers)
     except Exception as error:
         print(f'Error getting posts for r/{subreddit_name}: {error}')
 
     posts = response.json()['data']['children']
-    return posts
+    last_post_id: str = response.json()['data']['after']
+    return posts, last_post_id

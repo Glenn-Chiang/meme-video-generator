@@ -17,12 +17,12 @@ def compose_images_to_video(images: List[np.ndarray], video_size: Tuple[int, int
     fps = 1 / seconds_per_video
 
     writer = cv2.VideoWriter(output_path, fourcc, fps, video_size)
-    
+
     for image in images:
         writer.write(image=image)
 
 
-def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str):
+def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str, seconds_per_video: int):
     video_size = (800, 800)
 
     print('Decoding images from urls...')
@@ -39,18 +39,14 @@ def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str
             print(f'Error processing img {idx}: {error}')
             continue
 
-    num_images = len(processed_images)
-    seconds_per_video = 4
-    video_duration = num_images * seconds_per_video
-
     print('Writing video...')
     compose_images_to_video(
         processed_images, video_size, seconds_per_video, output_path=video_filepath)
-    
 
     print('Adding music...')
     video = VideoFileClip(video_filepath)
-    audio = AudioFileClip(audio_filepath) 
+    audio = AudioFileClip(audio_filepath)
+    audio = audio.cutout(video.duration, audio.duration)  # Cut excess audio
     final_video: VideoFileClip = video.set_audio(audio)
     final_video.write_videofile(video_filepath)
 
@@ -62,4 +58,4 @@ if __name__ == '__main__':
 
 
 # Song length: 124s. Take first 64 - 80 seconds?
-# 16 - 20 images, 4 seconds per image 
+# 16 - 20 images, 4 seconds per image

@@ -1,5 +1,6 @@
 from reddit_api_methods import get_token, get_subreddit_posts
 from video_maker import create_video
+from moviepy.editor import AudioFileClip
 
 
 def main():
@@ -10,28 +11,42 @@ def main():
     headers = {'Authorization': f'bearer {token}',
                'User-Agent': 'script:scraper:0.1 (by /u/DarthKnight024)'}
 
-    target_subreddits = ['animemes', 'anime_irl']
+    target_subreddits = ['ProgrammerHumor']
+    # target_subreddits = ['animemes', 'anime_irl']
 
     video_filepath = 'tmp/video.mp4'
     audio_filepath = 'assets/music.mp3'
-    
+    audio = AudioFileClip(audio_filepath)
+
+    video_length = audio.duration  # Video length will be equal to song duration
+    seconds_per_video = 4
+    # Number of images required to fill video
+    num_images_required = video_length // 4
+
     image_urls = []
+    last_post_ids = [None for _ in range(len(target_subreddits))]
 
-    for subreddit in target_subreddits:
-        print(f'Getting posts for r/{subreddit}...')
-        posts = get_subreddit_posts(
-            subreddit_name=subreddit, headers=headers, count=20)
-        for post_with_kind in posts:
-            post = post_with_kind['data']
-            if post['domain'] != 'i.redd.it': # Skip non-image posts
-                continue
-            image_url = post['url']
-            image_urls.append(image_url)
-            print(image_url)
-        print('')
+    while len(image_urls) < num_images_required:
+        for i, subreddit in enumerate(target_subreddits):
+            print(f'Getting posts for r/{subreddit}...')
+            posts, last_post_id = get_subreddit_posts(
+                subreddit_name=subreddit, headers=headers, limit=10, after=last_post_ids[i])
+            last_post_ids[i] = last_post_id
 
+            for post_with_kind in posts:
+                post = post_with_kind['data']
+                image_url: str = post['url']
+                if post['domain'] != 'i.redd.it' or image_url.endswith('gif'):  # Skip non-image posts
+                    continue
+                image_urls.append(image_url)
+                print(image_url)
+                if len(image_urls) >= num_images_required:
+                    break
 
-    create_video(image_urls=image_urls, video_filepath=video_filepath, audio_filepath=audio_filepath)
+            print('')
+
+    # print(len(image_urls))
+    create_video(image_urls=image_urls, video_filepath=video_filepath, audio_filepath=audio_filepath, seconds_per_video=seconds_per_video)
 
 
 if __name__ == '__main__':
