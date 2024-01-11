@@ -50,10 +50,3 @@ def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str
     final_video.write_videofile('tmp/video_final.mp4')
 
     print('Done')
-
-
-if __name__ == '__main__':
-    create_video()
-
-
-# Video stops after a certain frame after audio is added. WHY??????

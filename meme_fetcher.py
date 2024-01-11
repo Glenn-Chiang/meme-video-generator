@@ -5,17 +5,17 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-OAUTH_CLIENT_ID = os.getenv('OAUTH_CLIENT_ID')
-OAUTH_CLIENT_SECRET = os.getenv('OAUTH_CLIENT_SECRET')
-ACCOUNT_USERNAME = os.getenv('ACCOUNT_USERNAME')
-ACCOUNT_PASSWORD = os.getenv('ACCOUNT_PASSWORD')
+REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
+REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
+REDDIT_USERNAME = os.getenv('REDDIT_USERNAME')
+REDDIT_PASSWORD = os.getenv('REDDIT_PASSWORD')
 
 
 def get_token():
     client_auth = requests.auth.HTTPBasicAuth(
-        username=OAUTH_CLIENT_ID, password=OAUTH_CLIENT_SECRET)
+        username=REDDIT_CLIENT_ID, password=REDDIT_CLIENT_SECRET)
     post_data = {'grant_type': 'password',
-                 'username': ACCOUNT_USERNAME, 'password': ACCOUNT_PASSWORD}
+                 'username': REDDIT_USERNAME, 'password': REDDIT_PASSWORD}
     headers = {"User-Agent": "ChangeMeClient/0.1 by YourUsername"}
 
     response = None
