@@ -3,8 +3,8 @@ import googleapiclient.discovery
 from googleapiclient.discovery import Resource
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
-from google.auth.transport import Request
-
+from google.auth.transport.requests import Request
+from googleapiclient.http import MediaFileUpload
 
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
@@ -15,7 +15,7 @@ TOKEN_FILE = './token.json'
 
 
 # Do not run this in production
-def get_auth_token():
+def save_token():
     flow = InstalledAppFlow.from_client_secrets_file(
         CREDENTIALS_FILE, scopes=SCOPES)
     credentials = flow.run_local_server(port=0)
@@ -27,6 +27,7 @@ def get_auth_token():
 def get_youtube_service():
     credentials = Credentials.from_authorized_user_file(
         TOKEN_FILE, scopes=SCOPES)
+    credentials.refresh(Request())
 
     return googleapiclient.discovery.build(
         serviceName=YOUTUBE_API_SERVICE_NAME, version=YOUTUBE_API_VERSION, credentials=credentials)
@@ -34,8 +35,10 @@ def get_youtube_service():
 
 def main():
     youtube: Resource = get_youtube_service()
-    request = youtube.channels().list(
-        mine=True, part='snippet,contentDetails,statistics')
+    # request = youtube.channels().list(
+    #     mine=True, part='snippet,contentDetails,statistics')
+    # response = request.execute()
+    request = youtube.videos().insert(body={}, media_body=MediaFileUpload('tmp/video_final.mp4'), part="contentDetails")
     response = request.execute()
     print(response)
 
