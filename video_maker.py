@@ -22,7 +22,7 @@ def compose_images_to_video(images: List[np.ndarray], video_size: Tuple[int, int
         writer.write(image=image)
 
 
-def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str, seconds_per_video: int):
+def create_video(image_urls: List[str], seconds_per_video: int, video_filepath: str, audio_filepath: str, final_video_filepath: str):
     video_size = (800, 800)
 
     print('Decoding images from urls...')
@@ -47,6 +47,6 @@ def create_video(image_urls: List[str], video_filepath: str, audio_filepath: str
     video = VideoFileClip(video_filepath)
     audio = AudioFileClip(audio_filepath)
     final_video: VideoFileClip = video.set_audio(audio)
-    final_video.write_videofile('tmp/video_final.mp4')
+    final_video.write_videofile(final_video_filepath)
 
     print('Done')

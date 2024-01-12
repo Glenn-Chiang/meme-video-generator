@@ -33,15 +33,20 @@ def get_youtube_service():
         serviceName=YOUTUBE_API_SERVICE_NAME, version=YOUTUBE_API_VERSION, credentials=credentials)
 
 
-def main():
+def upload_video(video_filepath, title, description):
     youtube: Resource = get_youtube_service()
-    # request = youtube.channels().list(
-    #     mine=True, part='snippet,contentDetails,statistics')
-    # response = request.execute()
-    request = youtube.videos().insert(body={}, media_body=MediaFileUpload('tmp/video_final.mp4'), part="contentDetails")
+    video_metadata = {
+        'snippet': {
+            'title': title,
+            'description': description,
+            'categoryId': '23'
+        }
+    }
+    request = youtube.videos().insert(body=video_metadata, media_body=MediaFileUpload(
+        video_filepath), part="contentDetails,snippet")
     response = request.execute()
     print(response)
 
 
 if __name__ == '__main__':
-    main()
+    upload_video(title='test title', description='test description', video_filepath='tmp/video_final.mp4')

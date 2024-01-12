@@ -1,6 +1,7 @@
 from meme_fetcher import get_token, get_subreddit_posts
 from video_maker import create_video
 from moviepy.editor import AudioFileClip
+from video_uploader import upload_video
 
 
 def main():
@@ -11,12 +12,14 @@ def main():
     headers = {'Authorization': f'bearer {token}',
                'User-Agent': 'script:scraper:0.1 (by /u/DarthKnight024)'}
 
-    target_subreddits = ['ProgrammerHumor', 'programminghorror']
-    # target_subreddits = ['animemes', 'anime_irl']
+    # target_subreddits = ['ProgrammerHumor']
+    target_subreddits = ['animemes', 'anime_irl']
 
     video_filepath = 'tmp/video.mp4'
     audio_filepath = 'assets/music.mp3'
     audio = AudioFileClip(audio_filepath)
+    final_video_filepath = 'tmp/video_final.mp4'
+    video_title = 'r/' + target_subreddits[0]
 
     video_length = audio.duration  # Video length will be equal to song duration
     seconds_per_video = 4
@@ -36,7 +39,8 @@ def main():
             for post_with_kind in posts:
                 post = post_with_kind['data']
                 image_url: str = post['url']
-                if post['domain'] != 'i.redd.it' or image_url.endswith('gif'):  # Skip non-image posts
+                # Skip non-image posts
+                if post['domain'] != 'i.redd.it' or image_url.endswith('gif'):
                     continue
                 image_urls.append(image_url)
                 print(image_url)
@@ -46,7 +50,10 @@ def main():
             print('')
 
     print('Images:', len(image_urls))
-    create_video(image_urls=image_urls, video_filepath=video_filepath, audio_filepath=audio_filepath, seconds_per_video=seconds_per_video)
+    create_video(image_urls=image_urls, video_filepath=video_filepath, audio_filepath=audio_filepath,
+                 seconds_per_video=seconds_per_video, final_video_filepath=final_video_filepath)
+    print('Uploading video...')
+    upload_video(video_filepath=final_video_filepath, title=video_title, description='test')
 
 
 if __name__ == '__main__':
