@@ -14,8 +14,9 @@ CREDENTIALS_FILE = './youtube_credentials.json'
 TOKEN_FILE = './token.json'
 
 
-# Do not run this in production
-def save_token():
+# Only need to run this function the first time you authenticate with google to obtain a refresh token
+# The token will be saved and used to authenticate all subsequent requests
+def obtain_token():
     flow = InstalledAppFlow.from_client_secrets_file(
         CREDENTIALS_FILE, scopes=SCOPES)
     credentials = flow.run_local_server(port=0)
@@ -25,6 +26,8 @@ def save_token():
 
 
 def get_youtube_service():
+    if not os.path.exists(TOKEN_FILE):
+        obtain_token()
     credentials = Credentials.from_authorized_user_file(
         TOKEN_FILE, scopes=SCOPES)
     credentials.refresh(Request())
