@@ -1,16 +1,16 @@
-from reddit_service import get_token, get_subreddit_posts
+from reddit_service import RedditService
 from video_maker import create_video
 from moviepy.editor import AudioFileClip
 from video_uploader import upload_video
+import os
+
+REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
+REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
 
 
 def main():
-    print('Authenticating...')
-    token = get_token()
-    print('Obtained token')
-
-    headers = {'Authorization': f'bearer {token}',
-               'User-Agent': 'script:scraper:0.1 (by /u/DarthKnight024)'}
+    print('Authenticating with reddit...')
+    reddit_service = RedditService(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)
 
     target_subreddits = ['ProgrammerHumor']
     # target_subreddits = ['animemes', 'anime_irl']
@@ -32,8 +32,8 @@ def main():
     while len(image_urls) < num_images_required:
         for i, subreddit in enumerate(target_subreddits):
             print(f'Getting posts for r/{subreddit}...')
-            posts, last_post_id = get_subreddit_posts(
-                subreddit_name=subreddit, headers=headers, limit=10, after=last_post_ids[i])
+            posts, last_post_id = reddit_service.get_subreddit_posts(
+                subreddit_name=subreddit, limit=10, after=last_post_ids[i])
             last_post_ids[i] = last_post_id
 
             for post_with_kind in posts:
@@ -53,7 +53,8 @@ def main():
     create_video(image_urls=image_urls, video_filepath=video_filepath, audio_filepath=audio_filepath,
                  seconds_per_video=seconds_per_video, final_video_filepath=final_video_filepath)
     print('Uploading video...')
-    upload_video(video_filepath=final_video_filepath, title=video_title, description='test')
+    upload_video(video_filepath=final_video_filepath,
+                 title=video_title, description='test')
 
 
 if __name__ == '__main__':
