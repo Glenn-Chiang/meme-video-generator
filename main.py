@@ -1,4 +1,4 @@
-from meme_fetcher import get_token, get_subreddit_posts
+from reddit_service import get_token, get_subreddit_posts
 from video_maker import create_video
 from moviepy.editor import AudioFileClip
 from video_uploader import upload_video

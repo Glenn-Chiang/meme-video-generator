@@ -7,41 +7,20 @@ load_dotenv()
 
 REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
-REDDIT_USERNAME = os.getenv('REDDIT_USERNAME')
-REDDIT_PASSWORD = os.getenv('REDDIT_PASSWORD')
 
 
 def get_token():
     client_auth = requests.auth.HTTPBasicAuth(
         username=REDDIT_CLIENT_ID, password=REDDIT_CLIENT_SECRET)
-    post_data = {'grant_type': 'password',
-                 'username': REDDIT_USERNAME, 'password': REDDIT_PASSWORD}
-    headers = {"User-Agent": "ChangeMeClient/0.1 by YourUsername"}
-
+    post_data = {'grant_type': 'client_credentials'}
     response = None
     try:
         response = requests.post('https://www.reddit.com/api/v1/access_token',
-                                 auth=client_auth, headers=headers, data=post_data)
+                                 auth=client_auth, data=post_data)
     except Exception as error:
         print(f'Error getting token: {error}')
         sys.exit()
     return response.json()['access_token']
-
-
-def get_subreddits(headers):
-    response = None
-    try:
-        response = requests.get(
-            'https://oauth.reddit.com/subreddits/popular', params={
-                'limit': 10,
-            }, headers=headers)
-        response.raise_for_status()
-    except Exception as error:
-        print(f'Error getting subreddits: {error}')
-        sys.exit()
-
-    subreddits = response.json()['data']['children']
-    return subreddits
 
 
 def get_subreddit_metadata(subreddit):
