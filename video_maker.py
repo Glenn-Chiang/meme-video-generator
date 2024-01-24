@@ -49,4 +49,3 @@ def create_video(image_urls: List[str], seconds_per_video: int, video_filepath: 
     final_video: VideoFileClip = video.set_audio(audio)
     final_video.write_videofile(final_video_filepath)
 
-    print('Done')

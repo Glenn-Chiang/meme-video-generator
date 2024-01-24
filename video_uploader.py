@@ -48,7 +48,6 @@ def upload_video(video_filepath, title, description):
     request = youtube.videos().insert(body=video_metadata, media_body=MediaFileUpload(
         video_filepath), part="contentDetails,snippet")
     response = request.execute()
-    print(response)
 
 
 if __name__ == '__main__':

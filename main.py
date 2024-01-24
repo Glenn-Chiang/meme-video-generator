@@ -10,11 +10,7 @@ REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
 
 
 def main():
-    if len(sys.argv) <= 1:
-        print("Please enter a list of 1 or more target subreddits")
-        sys.exit()
-
-    target_subreddits = sys.argv[1:]
+    target_subreddits = ['ProgrammerHumor']
 
     print('Authenticating with reddit...')
     reddit_service = RedditService(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)
@@ -25,6 +21,7 @@ def main():
     final_video_filepath = 'tmp/video_final.mp4'
 
     video_title = 'r/' + target_subreddits[0]
+    video_description = f'Meme compilation from {video_title}'
     video_length = audio.duration  # Video length will be equal to audio duration
     seconds_per_video = 4
     # Number of images required to fill video length at the given rate
@@ -46,7 +43,7 @@ def main():
                 print(f'Error getting posts for r/{subreddit}: {error}')
                 sys.exit()
 
-            if not posts or not last_post_id:
+            if not posts:
                 print(f'Error getting posts for r/{subreddit}')
                 sys.exit()
 
@@ -70,7 +67,8 @@ def main():
                  seconds_per_video=seconds_per_video, final_video_filepath=final_video_filepath)
     print('Uploading video...')
     upload_video(video_filepath=final_video_filepath,
-                 title=video_title, description='test')
+                 title=video_title, description=video_description)
+    print('Video uploaded!')
 
 
 if __name__ == '__main__':
