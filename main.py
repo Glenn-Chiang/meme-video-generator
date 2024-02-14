@@ -53,9 +53,9 @@ def main():
         # If we fetch 0 posts from a batch, we assume there are no more posts in the subreddit and stop trying to fetch more
         if not posts:
             break
-        
+
         # Image urls obtained only from this batch
-        image_urls_in_batch = []
+        image_urls_in_batch = 0
         for post_meta in posts:
             post = post_meta['data']
             image_url: str = post['url']
@@ -64,23 +64,21 @@ def main():
             if post['domain'] != 'i.redd.it' or image_url.endswith('gif'):
                 continue
 
-            image_urls_in_batch.append(image_url)
+            image_urls_in_batch += 1
+            image_urls.append(image_url)
             print(image_url)
             if len(image_urls) >= num_images_required:
                 break
-        
-        # If none of the posts in the batch are images, stop fetching posts
-        if len(image_urls_in_batch) == 0:
-            break
 
-        # Add images from this batch to main list of images
-        image_urls.extend(image_urls_in_batch)
+        # If none of the posts in the batch are images, stop fetching posts
+        if image_urls_in_batch == 0:
+            break
 
     # If we are unable to fetch a single post from the given subreddit name, we assume that this subreddit does not exist and exit the program
     if total_posts_scraped == 0:
         print(f'Error getting posts from r/{target_subreddit}')
         sys.exit()
-    
+
     if len(image_urls) == 0:
         print(f'Unable to get any images from r/{target_subreddit}')
         sys.exit()
