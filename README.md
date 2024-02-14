@@ -15,6 +15,9 @@ python -m venv venv
 ```
 pip install -r requirements.txt
 ```
+## Get credentials for Reddit API usage
+1. Go to https://reddit.com/prefs/apps and follow the steps to register for usage of the reddit API
+2. Obtain a CLIENT_ID and CLIENT_SECRET
 ## Usage
 Specify 1 or more subreddits as a space-delimited list of command line arguments.  
 Note that subreddit names are case-sensitive.
