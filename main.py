@@ -7,16 +7,16 @@ import os
 import sys
 from dotenv import load_dotenv
 load_dotenv()
+import prompts
 
 REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
 
 
 def main():
-    # Get settings chosen by user
-    target_subreddit = input('Which subreddit do you want to scrape from?: ')
-    video_title = input('Set a title for your video: ')
-
+    target_subreddit = prompts.get_subreddit()
+    video_title = prompts.get_title()
+  
     print('Authenticating with reddit...')
     reddit_service = RedditService(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)
 
