@@ -16,12 +16,12 @@ REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
 def main():
     target_subreddit = prompts.get_subreddit()
     video_title = prompts.get_title()
-  
+    audio_filepath = prompts.get_audio_file()
+    
     print('Authenticating with reddit...')
     reddit_service = RedditService(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)
 
     video_filepath = 'output/video.mp4'
-    audio_filepath = 'audio/music.mp3'
     audio = AudioFileClip(audio_filepath)
     final_video_filepath = f'output/{video_title}.mp4'
 

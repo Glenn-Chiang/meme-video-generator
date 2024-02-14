@@ -1,4 +1,5 @@
 import re
+import os
 
 
 def get_subreddit():
@@ -32,3 +33,19 @@ def get_title():
             break
 
     return title
+
+
+def get_audio_file():
+    files = os.listdir('audio')
+
+    while True:
+        print('Audio files:')
+        for index, file in enumerate(files):
+            print(f"{index + 1}: {file}")
+        choice = input(
+            'Select the index number of the audio file you want to use: ')
+        if (not choice.isdigit() or int(choice) < 1 or int(choice) > len(files)):
+            print(f'Enter a digit from 1 to {len(files)}')
+        else:
+            break
+    return choice
