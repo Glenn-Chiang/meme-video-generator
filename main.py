@@ -13,15 +13,16 @@ REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
 
 def main():
     # Get settings chosen by user
-    target_subreddit = input('Which subreddit do you want to scrape from? ')
+    target_subreddit = input('Which subreddit do you want to scrape from?: ')
+    video_title = input('Set a title for your video: ')
 
     print('Authenticating with reddit...')
     reddit_service = RedditService(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)
 
     video_filepath = 'output/video.mp4'
-    audio_filepath = 'assets/music.mp3'
+    audio_filepath = 'audio/music.mp3'
     audio = AudioFileClip(audio_filepath)
-    final_video_filepath = 'output/video_final.mp4'
+    final_video_filepath = f'output/{video_title}.mp4'
 
     video_length = audio.duration  # Video length will be equal to audio duration
     seconds_per_frame = 5
@@ -35,12 +36,14 @@ def main():
     batch_size = num_images_required
     # How many posts (including skipped non-image posts) scraped from the subreddit so far
     total_posts_scraped = 0
+    # Keep track of the id of the latest post that was scraped
+    last_post_id = None
 
     while (len(image_urls) < num_images_required):
         posts = []
         try:
-            posts = reddit_service.get_subreddit_posts(
-                subreddit_name=target_subreddit, limit=batch_size)
+            posts, last_post_id = reddit_service.get_subreddit_posts(
+                subreddit_name=target_subreddit, limit=batch_size, after=last_post_id)
             # Every time we fetch a batch of posts, update the total number of posts fetched so far
             total_posts_scraped += batch_size
         except Exception as error:
@@ -50,7 +53,9 @@ def main():
         # If we fetch 0 posts from a batch, we assume there are no more posts in the subreddit and stop trying to fetch more
         if not posts:
             break
-
+        
+        # Image urls obtained only from this batch
+        image_urls_in_batch = []
         for post_meta in posts:
             post = post_meta['data']
             image_url: str = post['url']
@@ -59,14 +64,25 @@ def main():
             if post['domain'] != 'i.redd.it' or image_url.endswith('gif'):
                 continue
 
-            image_urls.append(image_url)
+            image_urls_in_batch.append(image_url)
             print(image_url)
             if len(image_urls) >= num_images_required:
                 break
+        
+        # If none of the posts in the batch are images, stop fetching posts
+        if len(image_urls_in_batch) == 0:
+            break
+
+        # Add images from this batch to main list of images
+        image_urls.extend(image_urls_in_batch)
 
     # If we are unable to fetch a single post from the given subreddit name, we assume that this subreddit does not exist and exit the program
     if total_posts_scraped == 0:
-        print(f'Error getting posts for r/{target_subreddit}')
+        print(f'Error getting posts from r/{target_subreddit}')
+        sys.exit()
+    
+    if len(image_urls) == 0:
+        print(f'Unable to get any images from r/{target_subreddit}')
         sys.exit()
 
     print('Images:', len(image_urls))

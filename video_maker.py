@@ -1,3 +1,4 @@
+import os
 from typing import List, Tuple
 import cv2
 import requests
@@ -48,3 +49,6 @@ def create_video(image_urls: List[str], seconds_per_frame: int, video_filepath: 
     audio = AudioFileClip(audio_filepath)
     final_video: VideoFileClip = video.set_audio(audio)
     final_video.write_videofile(final_video_filepath)
+    
+    # Remove the video file without the audio
+    os.remove(video_filepath)
