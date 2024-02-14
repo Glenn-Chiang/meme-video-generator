@@ -26,14 +26,13 @@ class RedditService():
         self.request_headers = {'Authorization': f'bearer {token}',
                                 'User-Agent': self._user_agent}
 
-    def get_subreddit_posts(self, subreddit_name, limit, after):
+    def get_subreddit_posts(self, subreddit_name, limit):
         response = None
         try:
             response = requests.get(
-                f'https://oauth.reddit.com/r/{subreddit_name}/top', params={'limit': limit, 'after': after}, headers=self.request_headers)
+                f'https://oauth.reddit.com/r/{subreddit_name}/top', params={'limit': limit}, headers=self.request_headers)
             response.raise_for_status()
         except Exception:
             raise
         posts = response.json()['data']['children']
-        last_post_id: str = response.json()['data']['after']
-        return posts, last_post_id
+        return posts

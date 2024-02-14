@@ -19,13 +19,12 @@ pip install -r requirements.txt
 1. Go to https://reddit.com/prefs/apps and follow the steps to register for usage of the reddit API
 2. Obtain a CLIENT_ID and CLIENT_SECRET
 ## Usage
-Specify 1 or more subreddits as a space-delimited list of command line arguments.  
-Note that subreddit names are case-sensitive.
+Specify the target subreddit that you want to scrape images from. Ensure that you enter the exact name with correct casing.
 ```
-python main.py <subreddit_name_1> <subreddit_name_2>
+python main.py <subreddit_name_1>
 ```
 Example usage:
 ```
-python main.py ProgrammerHumor anime_irl
+python main.py ProgrammerHumor
 ```
 If 1 or more of the subreddit names are invalid or non-existent, the script will exit.
