@@ -19,10 +19,10 @@ def main():
     print('Authenticating with reddit...')
     reddit_service = RedditService(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)
 
-    video_filepath = 'tmp/video.mp4'
+    video_filepath = 'output/video.mp4'
     audio_filepath = 'assets/music.mp3'
     audio = AudioFileClip(audio_filepath)
-    final_video_filepath = 'tmp/video_final.mp4'
+    final_video_filepath = 'output/video_final.mp4'
 
     video_title = 'r/' + target_subreddits[0]
     video_length = audio.duration  # Video length will be equal to audio duration

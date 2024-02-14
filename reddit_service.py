@@ -1,8 +1,6 @@
 import requests.auth
 import requests
 import sys
-from dotenv import load_dotenv
-load_dotenv()
 
 
 class RedditService():
