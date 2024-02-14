@@ -27,7 +27,7 @@ def main():
     video_length = audio.duration  # Video length will be equal to audio duration
     seconds_per_frame = 5
     # Number of images required to fit the length of the video if each image is displayed for given number of seconds
-    num_images_required = video_length // 4
+    num_images_required = video_length // seconds_per_frame
     print('Number of images required:', num_images_required)
     image_urls = []
     print(f'Getting posts for r/{target_subreddit}...')
