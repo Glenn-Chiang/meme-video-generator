@@ -27,26 +27,27 @@ git clone https://github.com/Glenn-Chiang/meme-video-generator.git
 cd meme-video-generator
 ```
 
-2. Create a virtual environment
+2. Create a `.env` file and fill in the keys `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` with the corresponding credentials you obtained in [the earlier step](#prerequisites). You can refer to `.env.example`.
 
-```
-python -m venv venv
-```
+3. (optional) Add audio files to the `/audio` folder. When the script is run, you will be prompted to choose an audio file from this folder. By default, this folder already contains a sample .mp3 file.
 
-3. Install dependencies
-
-```
-pip install -r requirements.txt
-
-```
-4. Create a `.env` file and fill in the keys REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET with the corresponding credentials you obtained in [the earlier step](#prerequisites). You can refer to `.env.example`.
-
-5. (optional) Add audio files to the `/audio` folder. When the script is run, you will be prompted to choose an audio file from this folder. By default, this folder already contains a sample .mp3 file.
-
-6. Create an `/output' folder at the root of the project directory. The generated video files will be located in this folder.
+4. Create an `/output` folder at the root of the project directory. The generated video files will be located in this folder.
 
 ```
 mkdir output
+```
+
+5. Create a virtual environment and install dependencies
+
+```
+python -m venv venv
+pip install -r requirements.txt
+```
+
+> Alternatively, build a docker image
+
+```
+docker build -t image_name .
 ```
 
 ## Usage
@@ -55,23 +56,13 @@ mkdir output
 python src/main.py
 ```
 
-# Getting started with Docker
-
-1. Clone the repository and navigate to the project directory
+If you are using docker:
 
 ```
-git clone https://github.com/Glenn-Chiang/meme-video-generator.git
-cd meme-video-generator
+docker run -it --env-file .env -v .\audio\:/app/audio -v .\output\:/app/output meme-gen
 ```
-
-2. Build the image
-
-```
-docker build -t meme-gen .
-```
-
-3. Run the container
-
-```
-docker run --rm -it --env-file .env -v .\audio\:/app/audio -v .\output\:/app/output meme-gen
-```
+Explanation:
+- `-it`: Necessary for the script to prompt the user for input
+- `--env-file .env`: Use the file `.env` as the env file to retrieve environmental variables from
+- `-v .\audio\:/app/audio`: Mount the local `./audio` folder to the container at the path `/app/audio`
+- `-v .\output\:/app/output`: Mount the local `./output` folder to the container at the path `/app/output`
