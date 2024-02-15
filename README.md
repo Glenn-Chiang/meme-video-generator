@@ -1,8 +1,22 @@
 ﻿# meme-video-generator
 
-This python script uses the Reddit API to fetch trending image posts from target subreddits, compiles them into a video and uploads the video to my youtube channel using the Youtube API. Target subreddits can be selected by passing them as a list of command line arguments.
+This python script generates a meme compilation video by scraping posts from your chosen subreddit and overlaying it with your chosen background music.
+
+# How it works
+1. Prompts the user to specify the subreddit they want to scrape from
+2. Prompts the user to specify the audio file they want to scrape from
+3. Computes the number of images required to create a video that matches the duration of the audio file, assuming that each image is displayed for x number of seconds
+4. Fetches the required number of images from the specified subreddit using the reddit API
+5. Combines the images into a video using the `opencv` and `moviepy` libraries
+6. Overlays the video with the user's chosen audio file to produce the finished video
+7. Outputs the finished video to the output directory
 
 # Getting started
+
+## Prerequisites
+### Register to use the Reddit API
+1. Go to https://reddit.com/prefs/apps and follow the steps to register for usage of the Reddit API
+2. Obtain a reddit client ID and client secret
 
 ## Installation and setup
 
@@ -23,24 +37,17 @@ python -m venv venv
 
 ```
 pip install -r requirements.txt
-```
 
-4. Create an output folder. Make sure this folder is at the root of the project directory.  
-   The generated video file will be located in this folder.
+```
+4. Create a `.env` file and fill in the keys REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET with the corresponding credentials you obtained in [the earlier step](#prerequisites). You can refer to `.env.example`.
+
+5. (optional) Add audio files to the `/audio` folder. When the script is run, you will be prompted to choose an audio file from this folder. By default, this folder already contains a sample .mp3 file.
+
+6. Create an `/output' folder at the root of the project directory. The generated video files will be located in this folder.
 
 ```
 mkdir output
 ```
-
-## Get credentials for Reddit API usage
-
-1. Go to https://reddit.com/prefs/apps and follow the steps to register for usage of the reddit API
-2. Obtain a reddit client ID and client secret.
-3. Create a `.env` file and fill in the keys REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET with the values obtained above. You can refer to `.env.example`.
-
-## Manage audio files
-
-When the script is run, you will be prompted to select a file from the /audio folder to use as the background audio for the video. Add any audio files you may want to use under this folder.
 
 ## Usage
 
