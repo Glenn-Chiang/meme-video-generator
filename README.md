@@ -66,5 +66,5 @@ docker build -t meme-gen .
 3. Run the container
 
 ```
-docker run --rm -it --env-file .env -v .\output\:/app/output meme-gen
+docker run --rm -it --env-file .env -v .\audio\:/app/audio -v .\output\:/app/output meme-gen
 ```
