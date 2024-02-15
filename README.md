@@ -27,11 +27,20 @@ mkdir output
 ## Manage audio files
 When the script is run, you will be prompted to select a file from the /audio folder to use as the background audio for the video. Add any audio files you may want to use under this folder. 
 ## Usage
-Specify the target subreddit that you want to scrape images from. Ensure that you enter the exact name of the subreddit in a case-sensitive manner.
 ```
-python main.py <subreddit_name_1>
+python src/main.py
 ```
-Example usage:
+
+## Using Docker
+Build image
 ```
-python main.py ProgrammerHumor
+docker build -t meme-gen .
+```
+Create volume to store output videos
+```
+
+```
+Run container
+```
+docker run --rm -it --env-file .env -v .\output\:/app/output meme-gen
 ```
