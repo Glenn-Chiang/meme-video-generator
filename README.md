@@ -59,7 +59,7 @@ python src/main.py
 If you are using docker:
 
 ```
-docker run -it --env-file .env -v .\audio\:/app/audio -v .\output\:/app/output meme-gen
+docker run -it --env-file .env -v .\audio\:/app/audio -v .\output\:/app/output image_name
 ```
 Explanation:
 - `-it`: Necessary for the script to prompt the user for input
