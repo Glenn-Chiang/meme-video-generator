@@ -1,22 +1,20 @@
 from reddit_service import RedditService
 from video_maker import create_video
 from moviepy.editor import AudioFileClip
-from video_uploader import upload_video
 from get_image_urls import get_image_urls
+import user_input
 import os
-import sys
 from dotenv import load_dotenv
 load_dotenv()
-import prompts
 
 REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
 
 
 def main():
-    target_subreddit = prompts.get_subreddit()
-    video_title = prompts.get_title()
-    audio_filepath = prompts.get_audio_file()
+    target_subreddit = user_input.get_subreddit()
+    video_title = user_input.get_title()
+    audio_filepath = user_input.get_audio_file()
     
     print('Authenticating with reddit...')
     reddit_service = RedditService(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)

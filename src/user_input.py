@@ -48,4 +48,5 @@ def get_audio_file():
             print(f'Enter a digit from 1 to {len(files)}')
         else:
             break
-    return choice
+    
+    return f'audio/{files[int(choice) - 1]}'
