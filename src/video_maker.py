@@ -53,14 +53,8 @@ def pad_and_resize_image(image: np.ndarray, video_size: Tuple[int, int]):
     # Aspect ratio of original image
     image_aspect_ratio = original_width / original_height
 
-    final_width, final_height = [0, 0]
-
-    if image_aspect_ratio < video_aspect_ratio:
-        final_height = video_height
-        final_width = int(video_height * image_aspect_ratio)
-    else:
-        final_width = video_width
-        final_height = int(video_width // image_aspect_ratio)
+    final_height = video_height if image_aspect_ratio < video_aspect_ratio else int(video_width // image_aspect_ratio)
+    final_width = video_width if image_aspect_ratio >= video_aspect_ratio else int(video_height * image_aspect_ratio)
 
     resized_image = cv2.resize(image, dsize=(final_width, final_height))
 
