@@ -41,6 +41,7 @@ mkdir output
 
 ```
 python -m venv venv
+.\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -51,7 +52,6 @@ docker build -t image_name .
 ```
 
 ## Usage
-
 ```
 python src/main.py
 ```
