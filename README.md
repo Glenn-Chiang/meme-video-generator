@@ -29,7 +29,7 @@ cd meme-video-generator
 
 2. Create a `.env` file and fill in the keys `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` with the corresponding credentials you obtained in [the earlier step](#prerequisites). You can refer to `.env.example`.
 
-3. (optional) Add audio files to the `/audio` folder. When the script is run, you will be prompted to choose an audio file from this folder. By default, this folder already contains a sample .mp3 file.
+3. (optional) Add audio files to the `/audio` folder. When the script is run, you will be prompted to choose an audio file from this folder. By default, this folder already contains some sample .mp3 files.
 
 4. Create an `/output` folder at the root of the project directory. The generated video files will be located in this folder.
 
