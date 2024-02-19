@@ -10,8 +10,8 @@ YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
-CREDENTIALS_FILE = './youtube_credentials.json'
-TOKEN_FILE = './token.json'
+CREDENTIALS_FILE = './auth/youtube_credentials.json'
+TOKEN_FILE = './auth/token.json'
 
 
 # Only need to run this function the first time you authenticate with google to obtain a refresh token
@@ -48,7 +48,45 @@ def upload_video(video_filepath, title, description):
     request = youtube.videos().insert(body=video_metadata, media_body=MediaFileUpload(
         video_filepath), part="contentDetails,snippet")
     response = request.execute()
+    return response
+
+
+def main():
+    video_folder = 'output'
+    video_files = os.listdir(video_folder)
+
+    while True:
+        print('Videos:')
+        for index, video_file in enumerate(video_files):
+            print(f'{index + 1}: {video_file}')
+        selected_option = input('Enter the number of the video that you want to upload: ')
+        if not selected_option.isdigit():
+            print('Enter a number\n')
+        elif int(selected_option) not in range(1, len(video_files) + 1):
+            print(f'Enter a number between 1 and {len(video_files)}\n')
+        else:
+            break
+
+    video_filepath = os.path.join(video_folder, video_files[int(selected_option) - 1]) 
+
+    title_limit = 50
+    description_limit = 2500
+    while True:
+        title = input('Enter a title for your video: ')
+        if len(title) > title_limit:
+            print(f'Title cannot be more than {title_limit} characters')
+        else:
+            break
+    while True:
+        description = input('Enter a description for your video: ')
+        if len(description) > description_limit:
+            print(f'Description cannot be more than {description_limit} characters')
+        else:
+            break
+
+    response = upload_video(title=title, description=description, video_filepath=video_filepath)
+    print(response)
 
 
 if __name__ == '__main__':
-    upload_video(title='test title', description='test description', video_filepath='tmp/video_final.mp4')
+    main()
