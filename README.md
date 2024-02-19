@@ -13,8 +13,7 @@ This python script generates a meme compilation video by scraping posts from you
 
 # Getting started
 
-## Prerequisites
-### Register to use the Reddit API
+## Register to use the Reddit API
 1. Go to https://reddit.com/prefs/apps and follow the steps to register for usage of the Reddit API
 2. Obtain a reddit client ID and client secret
 
@@ -61,8 +60,28 @@ If you are using docker:
 ```
 docker run -it --env-file .env -v .\audio\:/app/audio -v .\output\:/app/output image_name
 ```
-Explanation:
-- `-it`: Necessary for the script to prompt the user for input
-- `--env-file .env`: Use the file `.env` as the env file to retrieve environmental variables from
-- `-v .\audio\:/app/audio`: Mount the local `./audio` folder to the container at the path `/app/audio`
-- `-v .\output\:/app/output`: Mount the local `./output` folder to the container at the path `/app/output`
+
+# Uploading to Youtube
+The videos you generated with the main script can be automatically uploaded to your own youtube channel by running `video_uploader.py`.
+
+## Obtain Youtube credentials
+1. Create a `auth` folder in the root directory
+2. Create a project in the [Google Cloud console](https://console.cloud.google.com)
+3. Navigate to APIs & Services > [Credentials](https://console.cloud.google.com/apis/credentials). Obtain a OAuth client ID and save the JSON file containing the client secret as `youtube_credentials.json` under the `auth` folder.
+4. [Enable the youtube API](https://console.cloud.google.com/apis/library/youtube.googleapis.com)
+5. [Configure a OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent)
+  - Add your google account to the testers list
+  - Add the following scopes:
+  ```  
+  https://www.googleapis.com/auth/youtube.upload
+  ```
+6. The first time you run the script, you will be redirected to a browser page displaying the OAuth consent screen. Proceed to authenticate yourself.
+7. Once you are authenticated, the script saves a `token.json` file under the `auth` folder. This file will be reused to maintain your authentication status so that you no longer have to reauthenticate yourself on subsequent runs.
+
+## Usage
+Run the script
+```
+python src/video_uploader.py
+```
+When the script is run, you will be prompted to select a video from the `output` folder, as well as set a title and description for the video.
+
